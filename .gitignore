@@ -1,1 +1,18 @@
+# Ignore Data and Datasets
+data/
+SPair-71k/
+*.zip
+*.tar.gz
 
+# Ignore PyTorch Model Checkpoints
+checkpoints/
+*.pth
+*.pt
+*.ckpt
+
+# Ignore Python Caches
+__pycache__/
+*.pyc
+
+# Ignore Colab / Jupyter Notebook Artifacts
+.ipynb_checkpoints/
