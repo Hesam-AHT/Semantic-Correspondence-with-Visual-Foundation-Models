@@ -1,6 +1,6 @@
 # DINO v2 
 import torch
-impoet torch.nn as nn
+import torch.nn as nn
 class DINOv2FeatureExtractore(nn.model):
     def __init__(self, model_size = 'vitb14'):
         # 'vits14' (small), 'vitb14' (base), 'vitl14' (large), or 'vitg14' (giant)
