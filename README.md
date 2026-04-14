@@ -28,7 +28,7 @@ wget http://cvlab.postech.ac.kr/research/SPair-71k/data/SPair-71k.tar.gz
 tar xzf SPair-71k.tar.gz
 ```
 
-### (Optional) Download SAM checkpoint
+### Download SAM checkpoint
 ```bash
 wget https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth
 pip install git+https://github.com/facebookresearch/segment-anything.git
