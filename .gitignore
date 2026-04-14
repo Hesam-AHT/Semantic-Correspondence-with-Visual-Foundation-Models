@@ -1,8 +1,8 @@
 # Ignore Data and Datasets
-data/
-SPair-71k/
-*.zip
-*.tar.gz
+#data/
+#SPair-71k/
+#*.zip
+#*.tar.gz
 
 # Ignore PyTorch Model Checkpoints
 checkpoints/
