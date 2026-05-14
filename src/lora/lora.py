@@ -179,6 +179,9 @@ def remove_lora(model: nn.Module) -> nn.Module:
 
         setattr(parent, child_name, module.original)
 
+    for param in model.parameters():
+        param.requires_grad = True
+
     return model
 
 

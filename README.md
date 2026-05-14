@@ -26,7 +26,7 @@ semantic_correspondence/
 │   ├── metrics/
 │   │   └── pck.py                # PCK for SPair-71k, PF-Pascal, AP-10K
 │   ├── lora/
-│   │   └── lora.py               # LoRALinear, inject_lora, count_trainable_params
+│   │   └── lora.py               # LoRALinear, inject_lora, remove_lora, count_trainable_params
 │   ├── datasets/
 │   │   ├── spair_dataset.py      # SPair-71k PyTorch Dataset
 │   │   ├── pf_pascal_dataset.py  # PF-Pascal Dataset
@@ -80,6 +80,12 @@ semantic_correspondence/
 │   ├── step2/                    # Finetuning results + ablations/
 │   ├── step3/                    # Grid-search results
 │   └── step4/                    # LoRA / MNN / ensemble / AP-10K results
+├── test/                         # Unit and integration tests (pytest)
+│   ├── test_extractor.py         # Feature extraction tests
+│   ├── test_lora.py              # LoRA inject / remove / merge tests
+│   ├── test_matching.py          # Argmax, soft-argmax, MNN tests
+│   ├── test_pck.py               # PCK metric tests
+│   └── test_pipeline.py          # End-to-end pipeline tests
 ├── requirements.txt
 └── README.md
 ```
@@ -184,7 +190,7 @@ Score-level fusion on a shared 32×32 SAM grid. Per-model weights are either fix
 | Metric | Normalisation |
 |--------|---------------|
 | PCK@α (SPair-71k) | max(bbox width, bbox height) |
-| PCK@α (PF-Pascal / PF-Willow) | Image diagonal |
+| PCK@α (PF-Pascal / PF-Willow) | max(image width, image height) |
 | PCK@α (AP-10K) | Image diagonal |
 
 α ∈ {0.05, 0.10, 0.20}.
