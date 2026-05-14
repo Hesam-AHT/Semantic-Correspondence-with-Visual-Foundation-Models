@@ -1,0 +1,102 @@
+<svg width="100%" viewBox="0 0 680 340" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Semantic correspondence pipeline</title>
+<desc>End-to-end pipeline: source/target images are resized, features extracted, cosine similarity computed, and keypoints predicted via argmax or soft-argmax, then evaluated with PCK.</desc>
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <style>
+    text { font-family: sans-serif; fill: #3d3d3a; }
+    .th { font-size: 14px; font-weight: 500; }
+    .ts { font-size: 12px; font-weight: 400; fill: #73726c; }
+    .c-gray rect { fill: #F1EFE8; stroke: #5F5E5A; }
+    .c-purple rect { fill: #EEEDFE; stroke: #534AB7; }
+    .c-teal rect { fill: #E1F5EE; stroke: #0F6E56; }
+    .c-coral rect { fill: #FAECE7; stroke: #993C1D; }
+    .c-amber rect { fill: #FAEEDA; stroke: #854F0B; }
+    .c-blue rect { fill: #E6F1FB; stroke: #185FA5; }
+    .c-green rect { fill: #EAF3DE; stroke: #3B6D11; }
+    .c-gray .th { fill: #444441; }
+    .c-purple .th { fill: #3C3489; }
+    .c-teal .th { fill: #085041; }
+    .c-coral .th { fill: #712B13; }
+    .c-amber .th { fill: #633806; }
+    .c-blue .th { fill: #0C447C; }
+    .c-green .th { fill: #27500A; }
+    .c-gray .ts { fill: #5F5E5A; }
+    .c-purple .ts { fill: #534AB7; }
+    .c-teal .ts { fill: #0F6E56; }
+    .c-coral .ts { fill: #993C1D; }
+    .c-amber .ts { fill: #854F0B; }
+    .c-blue .ts { fill: #185FA5; }
+    .c-green .ts { fill: #3B6D11; }
+    .arr { stroke: #73726c; stroke-width: 1.5; fill: none; }
+  </style>
+</defs>
+
+<g class="c-gray">
+  <rect x="24" y="130" width="96" height="80" rx="8" stroke-width="0.5"/>
+  <text class="th" x="72" y="162" text-anchor="middle" dominant-baseline="central">Image pair</text>
+  <text class="ts" x="72" y="182" text-anchor="middle" dominant-baseline="central">Source + target</text>
+  <text class="ts" x="72" y="198" text-anchor="middle" dominant-baseline="central">resized to res</text>
+</g>
+
+<line x1="120" y1="170" x2="148" y2="170" class="arr" marker-end="url(#arrow)"/>
+
+<g class="c-purple">
+  <rect x="150" y="110" width="118" height="120" rx="8" stroke-width="0.5"/>
+  <text class="th" x="209" y="152" text-anchor="middle" dominant-baseline="central">Feature</text>
+  <text class="th" x="209" y="170" text-anchor="middle" dominant-baseline="central">extractor</text>
+  <text class="ts" x="209" y="192" text-anchor="middle" dominant-baseline="central">DINOv2 / DINOv3</text>
+  <text class="ts" x="209" y="208" text-anchor="middle" dominant-baseline="central">SAM · PCA whiten</text>
+</g>
+
+<line x1="268" y1="170" x2="296" y2="170" class="arr" marker-end="url(#arrow)"/>
+
+<g class="c-teal">
+  <rect x="298" y="120" width="110" height="100" rx="8" stroke-width="0.5"/>
+  <text class="th" x="353" y="158" text-anchor="middle" dominant-baseline="central">Cosine sim</text>
+  <text class="ts" x="353" y="178" text-anchor="middle" dominant-baseline="central">Per keypoint vs</text>
+  <text class="ts" x="353" y="194" text-anchor="middle" dominant-baseline="central">all target patches</text>
+</g>
+
+<path d="M408 155 L424 155 L424 128 L436 128" fill="none" stroke="#73726c" stroke-width="1" marker-end="url(#arrow)" opacity="0.5"/>
+<path d="M408 185 L424 185 L424 212 L436 212" fill="none" stroke="#73726c" stroke-width="1" marker-end="url(#arrow)" opacity="0.5"/>
+
+<g class="c-coral">
+  <rect x="438" y="100" width="112" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="494" y="122" text-anchor="middle" dominant-baseline="central">Argmax</text>
+  <text class="ts" x="494" y="140" text-anchor="middle" dominant-baseline="central">Hard prediction</text>
+</g>
+
+<g class="c-amber">
+  <rect x="438" y="184" width="112" height="56" rx="8" stroke-width="0.5"/>
+  <text class="th" x="494" y="206" text-anchor="middle" dominant-baseline="central">Soft-argmax</text>
+  <text class="ts" x="494" y="224" text-anchor="middle" dominant-baseline="central">Windowed K×K</text>
+</g>
+
+<g class="c-blue">
+  <rect x="438" y="268" width="112" height="40" rx="8" stroke-width="0.5"/>
+  <text class="th" x="494" y="284" text-anchor="middle" dominant-baseline="central">MNN verify</text>
+  <text class="ts" x="494" y="300" text-anchor="middle" dominant-baseline="central">Optional filter</text>
+</g>
+
+<line x1="494" y1="156" x2="494" y2="266" stroke="#73726c" stroke-width="0.8" stroke-dasharray="4 3" opacity="0.4"/>
+
+<path d="M550 156 L590 156 L590 184 L604 184" fill="none" stroke="#73726c" stroke-width="1" opacity="0.5"/>
+<path d="M550 212 L590 212 L590 184 L604 184" fill="none" stroke="#73726c" stroke-width="1" opacity="0.5"/>
+<line x1="604" y1="184" x2="604" y2="185" class="arr" marker-end="url(#arrow)"/>
+
+<g class="c-green">
+  <rect x="606" y="144" width="66" height="80" rx="8" stroke-width="0.5"/>
+  <text class="th" x="639" y="174" text-anchor="middle" dominant-baseline="central">PCK</text>
+  <text class="ts" x="639" y="193" text-anchor="middle" dominant-baseline="central">@0.05</text>
+  <text class="ts" x="639" y="209" text-anchor="middle" dominant-baseline="central">@0.10</text>
+</g>
+
+<text class="ts" x="72" y="108" text-anchor="middle">1. Input</text>
+<text class="ts" x="209" y="88" text-anchor="middle">2. Extract</text>
+<text class="ts" x="353" y="100" text-anchor="middle">3. Similarity</text>
+<text class="ts" x="494" y="74" text-anchor="middle">4. Match</text>
+<text class="ts" x="639" y="122" text-anchor="middle">5. Eval</text>
+</svg>

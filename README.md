@@ -2,11 +2,15 @@
 
 Training-free and finetuned semantic correspondence using DINOv2, DINOv3, and SAM. Keypoints are matched by comparing dense patch features with argmax or windowed soft-argmax, with optional MNN verification and score-level ensemble fusion. Benchmarked on SPair-71k, PF-Pascal, PF-Willow, and AP-10K.
 
-<img width="508" height="260" alt="semantic_correspondence" src="https://github.com/user-attachments/assets/c0e09637-21ab-49fe-852e-5d71d95323e1" />
+<img width="508" height="260" alt="semantic_correspondence" src="assets/teaser.png" />
+
 
 ## Pipeline
 
-<img width="600" height="276" alt="window_softargmax" src="https://github.com/user-attachments/assets/254d180f-f513-4568-b6b3-8368cf0828be" />
+<img width="600" height="276" alt="Pipeline" src="assets/semantic_correspondence_pipeline.svg" />
+
+<img width="600" height="276" alt="window_softargmax" src="assets/windowed_soft_argmax.svg" />
+
 
 1. Resize source and target images to model-specific resolution
 2. Extract dense patch-token features (optionally multi-layer averaged + PCA-whitened)
