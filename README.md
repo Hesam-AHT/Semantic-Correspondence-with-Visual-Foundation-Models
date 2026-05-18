@@ -1,6 +1,6 @@
 # Semantic Correspondence with Vision Foundation Models
 
-Training-free and finetuned semantic correspondence using DINOv2, DINOv3, and SAM. Keypoints are matched by comparing dense patch features with argmax or windowed soft-argmax, with optional MNN verification and score-level ensemble fusion. Benchmarked on SPair-71k, PF-Pascal, PF-Willow, and AP-10K.
+Training-free and finetuned semantic correspondence using DINOv2, DINOv3, and SAM. Keypoints are matched by comparing dense patch features with argmax or windowed soft-argmax, with MNN verification and score-level ensemble fusion. Benchmarked on SPair-71k, PF-Pascal, PF-Willow, and AP-10K.
 
 <img width="508" height="260" alt="semantic_correspondence" src="assets/teaser.png" />
 
