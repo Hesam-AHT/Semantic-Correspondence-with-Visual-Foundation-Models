@@ -41,3 +41,11 @@ Thumbs.db
 
 # Colab / Drive mounts
 /content/
+
+
+# Claude
+.claude/
+
+# Pytest
+.pytest_cache/
+**/__pycache__/

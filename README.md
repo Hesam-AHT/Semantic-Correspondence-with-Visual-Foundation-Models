@@ -57,14 +57,24 @@ semantic_correspondence/
 │   └── report_statistics.py
 ├── configs/
 │   └── paths.py                  # Centralised data / weight / results paths
-├── notebooks/                    # Colab-ready step-by-step notebooks
-│   ├── step1_baseline.ipynb      # Zero-shot evaluation (DINOv2, DINOv3, SAM)
-│   ├── step2_finetune.ipynb      # Block-unfreeze finetuning + ablations
-│   ├── step3_softargmax.ipynb    # Grid search: K × temperature
-│   ├── step4a_lora.ipynb         # LoRA rank ablation
-│   ├── step4b_mnn.ipynb          # MNN verification
-│   ├── step4c_ensemble.ipynb     # Learned ensemble weights
-│   └── step4d_ap10k.ipynb        # AP-10K cross-species evaluation
+├── notebooks/
+│   ├── colab/                    # Google Colab notebooks (Drive-mounted, self-contained)
+│   │   ├── step1_baseline.ipynb
+│   │   ├── step2_finetune.ipynb
+│   │   ├── step3_softargmax.ipynb
+│   │   ├── step4a_lora.ipynb
+│   │   ├── step4b_mnn.ipynb
+│   │   ├── step4c_ensemble.ipynb
+│   │   └── step4d_ap10k.ipynb
+│   └── local/                    # Local notebooks (RTX 4070 / 8GB VRAM)
+│       ├── utils.py              # Shared utilities (paths, progress, download, fp16)
+│       ├── step1_baseline.ipynb
+│       ├── step2_finetune.ipynb
+│       ├── step3_softargmax.ipynb
+│       ├── step4a_lora.ipynb
+│       ├── step4b_mnn.ipynb
+│       ├── step4c_ensemble.ipynb
+│       └── step4d_ap10k.ipynb
 ├── data/                         # Datasets (not tracked by git)
 │   ├── SPair-71k/
 │   ├── PF-Pascal/
@@ -90,6 +100,7 @@ semantic_correspondence/
 │   ├── test_matching.py          # Argmax, soft-argmax, MNN tests
 │   ├── test_pck.py               # PCK metric tests
 │   └── test_pipeline.py          # End-to-end pipeline tests
+├── setup.py
 ├── requirements.txt
 └── README.md
 ```
@@ -123,19 +134,71 @@ All paths are configured in [configs/paths.py](configs/paths.py). Set `USE_DRIVE
 
 ## Quick Start
 
-### Notebooks (recommended for Colab)
+### Notebooks (Google Colab)
 
 Open the notebooks in order. Each notebook is self-contained — it mounts Drive, clones the repo, downloads weights, and runs the experiment end-to-end.
 
 | Notebook | What it does |
 |----------|-------------|
-| [step1_baseline.ipynb](notebooks/step1_baseline.ipynb) | Zero-shot evaluation of DINOv2, DINOv3, SAM on SPair-71k |
-| [step2_finetune.ipynb](notebooks/step2_finetune.ipynb) | Temperature / blocks / LR ablations + full finetuning |
-| [step3_softargmax.ipynb](notebooks/step3_softargmax.ipynb) | K × temperature grid search for windowed soft-argmax |
-| [step4a_lora.ipynb](notebooks/step4a_lora.ipynb) | LoRA rank ablation (r = 2, 4, 8, 16) vs block-unfreezing |
-| [step4b_mnn.ipynb](notebooks/step4b_mnn.ipynb) | MNN verification (max_patch_dist ablation) |
-| [step4c_ensemble.ipynb](notebooks/step4c_ensemble.ipynb) | Learned score-level ensemble of DINOv2 + DINOv3 + SAM |
-| [step4d_ap10k.ipynb](notebooks/step4d_ap10k.ipynb) | Full pipeline on AP-10K with diagonal PCK |
+| [step1_baseline.ipynb](notebooks/colab/step1_baseline.ipynb) | Zero-shot evaluation of DINOv2, DINOv3, SAM on SPair-71k |
+| [step2_finetune.ipynb](notebooks/colab/step2_finetune.ipynb) | Temperature / blocks / LR ablations + full finetuning |
+| [step3_softargmax.ipynb](notebooks/colab/step3_softargmax.ipynb) | K × temperature grid search for windowed soft-argmax |
+| [step4a_lora.ipynb](notebooks/colab/step4a_lora.ipynb) | LoRA rank ablation (r = 2, 4, 8, 16) vs block-unfreezing |
+| [step4b_mnn.ipynb](notebooks/colab/step4b_mnn.ipynb) | MNN verification (max_patch_dist ablation) |
+| [step4c_ensemble.ipynb](notebooks/colab/step4c_ensemble.ipynb) | Learned score-level ensemble of DINOv2 + DINOv3 + SAM |
+| [step4d_ap10k.ipynb](notebooks/colab/step4d_ap10k.ipynb) | Full pipeline on AP-10K with diagonal PCK |
+
+## Running Locally (RTX 4070 / 8GB VRAM)
+
+### Setup
+
+Install the package in editable mode so all notebooks can import from `src/`:
+
+```bash
+pip install -e .
+pip install -r requirements.txt
+```
+
+### Notebooks
+
+Local versions of all notebooks are in `notebooks/local/`. They differ from
+the Colab versions in the following ways:
+
+- No Google Drive dependency — all data and weights stored inside the repo
+- Datasets downloaded automatically into `data/` on first run
+- DINOv3 uses ViT-B instead of ViT-L to fit within 8GB VRAM
+- Float16 throughout with float32 NaN guard for cosine similarity
+- Sequential model loading in Step 4c ensemble (one model at a time)
+- Progress tracking via `progress.json` — safe to interrupt and resume
+
+### Running a notebook
+
+```bash
+jupyter notebook notebooks/local/step1_baseline.ipynb
+```
+
+Or open directly in VS Code.
+
+### Dataset storage
+
+Datasets are downloaded automatically on first run to `data/` (gitignored):
+
+| Dataset | Path | Size |
+|---------|------|------|
+| SPair-71k | `data/SPair-71k/` | ~2GB |
+| PF-Pascal | `data/PF-Pascal/` | ~200MB |
+| PF-Willow | `data/PF-Willow/` | ~150MB |
+| AP-10K | `data/AP-10K/` | ~1.5GB |
+
+### Weight storage
+
+Model weights are saved to `weights/` (gitignored):
+
+| Model | Path |
+|-------|------|
+| DINOv2 ViT-B/14 | `weights/dinov2_vitb14_pretrain.pth` |
+| DINOv3 ViT-B/16 | `weights/dinov3_vitb16_pretrain.pth` |
+| SAM ViT-B | `weights/sam_vit_b.pth` |
 
 ### Scripts
 
