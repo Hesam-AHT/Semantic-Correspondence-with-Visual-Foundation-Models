@@ -7,6 +7,8 @@ def extract_dense_features(model, img_tensor, training=False):
 
     with context:
         #get tokens
+        param = next(model.parameters())
+        img_tensor = img_tensor.to(dtype=param.dtype, device=param.device)
         features_dict = model.forward_features(img_tensor)
         patch_tokens = features_dict['x_norm_patchtokens']  # [B, N_patches, D]
 
@@ -117,7 +119,8 @@ def extract_dense_features_SAM_dep(model, img_tensor, training=False, image_size
 
 def extract_layer_features(model, img_tensor, layer_idx):
     with torch.no_grad():
-
+        param = next(model.parameters())
+        img_tensor = img_tensor.to(dtype=param.dtype, device=param.device)
         # get_intermediate_layers returns patch tokens only (CLS + storage are already stripped)
         patch_tokens = model.get_intermediate_layers(img_tensor, n=[layer_idx], norm=True)[0]  # [B, N_patches, D]
 
@@ -178,8 +181,12 @@ def extract_dense_features_multilayer(model, img_tensor, n_last_layers=3, traini
     context = torch.no_grad() if not training else torch.enable_grad()
 
     with context:
+        param = next(model.parameters())
+        img_tensor = img_tensor.to(dtype=param.dtype, device=param.device)
+        total_blocks = len(model.blocks)
+        layer_indices = list(range(total_blocks - n_last_layers, total_blocks))
         layers = model.get_intermediate_layers(
-            img_tensor, n=n_last_layers, return_class_token=False, norm=True
+            img_tensor, n=layer_indices, return_class_token=False, norm=True
         )  # list of n_last_layers tensors, each [B, N, D]
 
         stacked = torch.stack(layers, dim=0)  # [n_layers, B, N, D]
