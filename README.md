@@ -185,7 +185,7 @@ Datasets are downloaded automatically on first run to `data/` (gitignored):
 
 | Dataset | Path | Size |
 |---------|------|------|
-| SPair-71k | `data/SPair-71k/` | ~2GB |
+| SPair-71k | `data/SPair-71k/` | ~200MB |
 | PF-Pascal | `data/PF-Pascal/` | ~200MB |
 | PF-Willow | `data/PF-Willow/` | ~150MB |
 | AP-10K | `data/AP-10K/` | ~1.5GB |
